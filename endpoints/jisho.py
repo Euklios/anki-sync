@@ -27,7 +27,7 @@ class Jisho(BaseProvider):
         self.api_client = Word()
         self.common_only = settings.common_only
 
-    def search_content_by_string(self, query: str, existing_details: NoteDetails) -> NoteDetails:
+    def update_content_by_query(self, query: str, existing_details: NoteDetails) -> NoteDetails:
         details = NoteDetails()
         matches = list(self._filter_matches(self.api_client.request(query), query))
 
