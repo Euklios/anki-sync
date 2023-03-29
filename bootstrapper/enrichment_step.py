@@ -36,9 +36,8 @@ class Step:
         # TODO: cleanup_query should be removed
         query = cleanup_query(note.fields['Question'])
 
-        for provider in self.enrichments[::-1]:
-            details = NoteDetails()
-            provider.update_content_by_query(query, note)
+        for provider in self.enrichments:
+            details = provider.update_content_by_query(query, note)
 
             note = merge_details(note, details)
 
