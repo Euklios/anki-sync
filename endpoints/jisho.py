@@ -1,3 +1,4 @@
+import typing
 from typing import Iterable
 
 from jisho_api.word import Word
@@ -9,10 +10,22 @@ from endpoints.abc.BaseProvider import BaseProvider
 from data.NoteDetails import NoteDetails
 
 
+class JishoSettings:
+    common_only: bool = True
+
+
 class Jisho(BaseProvider):
-    def __init__(self, common_only=True):
+    @staticmethod
+    def config_class() -> typing.Type:
+        return JishoSettings
+
+    @staticmethod
+    def endpoint_name() -> str:
+        return "jisho"
+
+    def __init__(self, settings: JishoSettings):
         self.api_client = Word()
-        self.common_only = common_only
+        self.common_only = settings.common_only
 
     def search_content_by_string(self, query: str, detail: NoteDetails) -> None:
         matches = list(self._filter_matches(self.api_client.request(query), query))

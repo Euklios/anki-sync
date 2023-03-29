@@ -1,16 +1,35 @@
 import json
+import typing
 from typing import Iterable
 
 import requests
 
 from data.NoteDetails import NoteDetails
-from data.Settings import AnkiSettings
 from endpoints.abc.NoteConsumer import BaseNoteConsumer
 from endpoints.abc.NoteProvider import BaseNoteProvider
 from utils import map_fields
 
 
+class AnkiSettings:
+    host: str = "http://localhost:8765/"
+    target_deck: str = None
+    question_field: str = "Question"
+    pronunciation_field: str = 'Pronunciation'
+    field_mappings: typing.Dict[str, str] = {
+        'meaning_mnemonic': 'Meaning Mnemonic',
+        'reading_mnemonic': 'Reading Mnemonic'
+    }
+
+
 class Anki(BaseNoteConsumer, BaseNoteProvider):
+    @staticmethod
+    def config_class() -> typing.Type:
+        return AnkiSettings
+
+    @staticmethod
+    def endpoint_name() -> str:
+        return "anki"
+
     def list_notes(self) -> Iterable[NoteDetails]:
         notes = self.anki_request('findNotes', query=f'deck:{self.settings.target_deck}')['result']
         notes = self.anki_request('notesInfo', notes=notes)['result']

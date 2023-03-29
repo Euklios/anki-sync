@@ -1,12 +1,13 @@
 import abc
-import typing
 
 
 class BaseEndpoint(abc.ABC):
+    @staticmethod
     @abc.abstractmethod
-    def config_class(self) -> typing.Type:
+    def config_class():
         pass
 
+    @staticmethod
     @abc.abstractmethod
-    def endpoint_name(self) -> str:
+    def endpoint_name() -> str:
         pass

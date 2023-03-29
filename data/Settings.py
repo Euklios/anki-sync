@@ -1,21 +1,12 @@
-from typing import Dict
+from typing import Dict, List
 
 
-class WanikaniSettings:
-    api_token: str = None
-
-
-class AnkiSettings:
-    host: str = "http://localhost:8765/"
-    target_deck: str = None
-    question_field: str = "Question"
-    pronunciation_field: str = 'Pronunciation'
-    field_mappings: Dict[str, str] = {
-        'meaning_mnemonic': 'Meaning Mnemonic',
-        'reading_mnemonic': 'Reading Mnemonic'
-    }
+class ProcessConfigurationObject:
+    source: str = None
+    target: str = None
+    enrichment: List[str] = list()
 
 
 class Settings:
-    wanikani = WanikaniSettings()
-    anki = AnkiSettings()
+    endpoints: Dict[str, Dict]
+    config: List[ProcessConfigurationObject]

@@ -1,14 +1,28 @@
+import typing
+
 import requests
 
 from data.NoteDetails import NoteDetails
 from endpoints.abc.BaseProvider import BaseProvider
 
 
+class WanikaniSettings:
+    api_token: str = None
+
+
 class Wanikani(BaseProvider):
+    @staticmethod
+    def config_class() -> typing.Type:
+        return WanikaniSettings
+
+    @staticmethod
+    def endpoint_name() -> str:
+        return "wanikani"
+
     api_base = "https://api.wanikani.com/v2/"
 
-    def __init__(self, token):
-        self.token = token
+    def __init__(self, settings: WanikaniSettings):
+        self.token = settings.api_token
         self.subjects = list(self._load_subjects())
 
     def _get(self, path):
