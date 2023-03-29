@@ -77,7 +77,7 @@ class Anki(BaseNoteConsumer, BaseNoteProvider):
 
         fields = map_fields(self.settings.field_mappings, note.fields)
 
-        if note.pronunciation:
+        if note.pronunciation and not note.pronunciation.startswith("[sound:"):
             self.anki_request('storeMediaFile', filename=filename, url=note.pronunciation)
             fields[self.settings.pronunciation_field] = f'[sound:{filename}]'
         else:
