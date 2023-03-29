@@ -6,7 +6,7 @@ from utils.decorators import retry
 from endpoints.abc.NoteConsumer import BaseNoteConsumer
 from endpoints.abc.NoteProvider import BaseNoteProvider
 from endpoints.abc.BaseProvider import BaseProvider
-from utils.utils import merge_details
+from utils.utils import merge_details, save_or_update_note
 
 
 def cleanup_query(question):
@@ -42,4 +42,4 @@ class Step:
 
             note = merge_details(note, details)
 
-        self.target.update_note(note, query)
+        save_or_update_note(self.target, note, query)
