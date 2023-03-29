@@ -5,7 +5,7 @@ from bootstrapper.enrichment_step import Step
 from endpoints.abc.BaseProvider import BaseProvider
 from endpoints.abc.NoteConsumer import BaseNoteConsumer
 from endpoints.abc.NoteProvider import BaseNoteProvider
-from settings_loader import load_settings
+from bootstrapper.settings_loader import load_settings
 
 
 def initialize_enrichment_steps() -> List[Step]:

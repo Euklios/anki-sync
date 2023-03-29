@@ -2,7 +2,7 @@ import re
 from typing import List
 
 from data.NoteDetails import NoteDetails
-from decorators import retry
+from utils.decorators import retry
 from endpoints.abc.NoteConsumer import BaseNoteConsumer
 from endpoints.abc.NoteProvider import BaseNoteProvider
 from endpoints.abc.BaseProvider import BaseProvider

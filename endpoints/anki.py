@@ -7,7 +7,7 @@ import requests
 from data.NoteDetails import NoteDetails
 from endpoints.abc.NoteConsumer import BaseNoteConsumer
 from endpoints.abc.NoteProvider import BaseNoteProvider
-from utils import map_fields
+from utils.utils import map_fields
 
 
 class AnkiSettings:
