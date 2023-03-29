@@ -72,16 +72,21 @@ class Wanikani(BaseProvider, BaseNoteProvider):
             total_count = response['total_count']
             collected_count += len(response['data'])
 
-    def search_content_by_string(self, query: str, details: NoteDetails) -> None:
+    def search_content_by_string(self, query: str) -> NoteDetails:
+        details = NoteDetails()
         try:
             vocab = next(filter(lambda a: a['data']['characters'] == query and a['object'] == 'vocabulary', self.subjects))
         except StopIteration:
-            return
+            return details
+
+        details.source = NoteSource(self.endpoint_name(), vocab['id'])
 
         details.fields['meaning_mnemonic'] = vocab['data']['meaning_mnemonic']
         details.fields['reading_mnemonic'] = vocab['data']['reading_mnemonic']
         details.tags.add(f"wanikani{vocab['data']['level']}")
         details.pronunciation = vocab['data']['pronunciation_audios'][0]['url']
+
+        return details
 
     def _convert_subject_to_note_details(self, subject) -> NoteDetails:
         details = NoteDetails()

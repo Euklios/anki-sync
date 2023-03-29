@@ -27,20 +27,23 @@ class Jisho(BaseProvider):
         self.api_client = Word()
         self.common_only = settings.common_only
 
-    def search_content_by_string(self, query: str, detail: NoteDetails) -> None:
+    def search_content_by_string(self, query: str) -> NoteDetails:
+        details = NoteDetails()
         matches = list(self._filter_matches(self.api_client.request(query), query))
 
         if len(matches) == 0:
-            return
+            return details
 
         if len(matches) > 1:
             tqdm.write(f"No unique match found for query {query}")
-            return
+            return details
 
         match = matches[0]
 
-        detail.tags.update(match.tags)
-        detail.tags.update(match.jlpt)
+        details.tags.update(match.tags)
+        details.tags.update(match.jlpt)
+
+        return details
 
     def _filter_matches(self, data: WordRequest, query: str) -> Iterable[WordConfig]:
         if data is None:
