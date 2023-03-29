@@ -4,7 +4,7 @@ from typing import Iterable
 
 import requests
 
-from data.NoteDetails import NoteDetails
+from data.NoteDetails import NoteDetails, NoteSource
 from endpoints.abc.NoteConsumer import BaseNoteConsumer
 from endpoints.abc.NoteProvider import BaseNoteProvider
 from utils.utils import map_fields
@@ -34,7 +34,7 @@ class Anki(BaseNoteConsumer, BaseNoteProvider):
         notes = self.anki_request('findNotes', query=f'deck:{self.settings.target_deck}')['result']
         notes = self.anki_request('notesInfo', notes=notes)['result']
 
-        return notes
+        return [self._convert_to_note_details(note) for note in notes]
 
     def __init__(self, settings: AnkiSettings):
         self.settings = settings
@@ -42,21 +42,21 @@ class Anki(BaseNoteConsumer, BaseNoteProvider):
     def store_note(self, note: NoteDetails) -> None:
         pass
 
-    def update_note(self, note, query: str, content_info: NoteDetails) -> None:
+    def update_note(self, note: NoteDetails, query: str) -> None:
         filename = f'{query}.mp3'
 
-        self.anki_request('addTags', notes=[note['noteId']], tags=' '.join(content_info.tags))
+        self.anki_request('addTags', notes=[note.source.identifier], tags=' '.join(note.tags))
 
-        fields = map_fields(self.settings.field_mappings, content_info.fields)
+        fields = map_fields(self.settings.field_mappings, note.fields)
 
-        if content_info.pronunciation:
-            self.anki_request('storeMediaFile', filename=filename, url=content_info.pronunciation)
+        if note.pronunciation:
+            self.anki_request('storeMediaFile', filename=filename, url=note.pronunciation)
             fields[self.settings.pronunciation_field] = f'[sound:{filename}]'
         else:
             fields[self.settings.pronunciation_field] = ''
 
         self.anki_request('updateNoteFields', note={
-            'id': note['noteId'],
+            'id': note.source.identifier,
             'fields': fields
         })
 
@@ -76,3 +76,12 @@ class Anki(BaseNoteConsumer, BaseNoteProvider):
             raise IOError(f"Failed to call anki action {action}: {response_json['error']}")
 
         return response_json
+
+    def _convert_to_note_details(self, note) -> NoteDetails:
+        details = NoteDetails()
+        details.tags = note['tags']
+        details.fields = {key: note['fields'][key]['value'] for key in note['fields']}
+        details.pronunciation = details.fields.pop(self.settings.pronunciation_field)
+        details.source = NoteSource(endpoint=self.endpoint_name(), identifier=note['noteId'])
+
+        return details

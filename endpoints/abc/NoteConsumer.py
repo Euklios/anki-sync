@@ -1,5 +1,4 @@
 import abc
-from typing import Iterable
 
 from data.NoteDetails import NoteDetails
 from endpoints.abc.BaseEndpoint import BaseEndpoint
@@ -11,7 +10,7 @@ class BaseNoteConsumer(BaseEndpoint, abc.ABC):
         pass
 
     @abc.abstractmethod
-    def update_note(self, note, query: str, content_info: NoteDetails) -> None:
+    def update_note(self, note: NoteDetails, query: str) -> None:
         pass
 
     def sync_profile(self):

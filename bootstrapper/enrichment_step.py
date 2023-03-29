@@ -6,6 +6,7 @@ from utils.decorators import retry
 from endpoints.abc.NoteConsumer import BaseNoteConsumer
 from endpoints.abc.NoteProvider import BaseNoteProvider
 from endpoints.abc.BaseProvider import BaseProvider
+from utils.utils import merge_details
 
 
 def cleanup_query(question):
@@ -30,13 +31,15 @@ class Step:
         self.target.sync_profile()
 
     @retry(times=5, exceptions=(ConnectionError, IOError), delay=5)
-    def update_single_note(self, note):
+    def update_single_note(self, note: NoteDetails):
         # TODO: The question field should be configurable
         # TODO: cleanup_query should be removed
-        query = cleanup_query(note['fields']['Question']['value'])
+        query = cleanup_query(note.fields['Question'])
 
-        details = NoteDetails()
         for provider in self.enrichments[::-1]:
+            details = NoteDetails()
             provider.search_content_by_string(query, details)
 
-        self.target.update_note(note, query, details)
+            note = merge_details(note, details)
+
+        self.target.update_note(note, query)
