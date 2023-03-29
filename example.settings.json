@@ -1,0 +1,22 @@
+{
+  "endpoints": {
+    "wanikani": {
+      "api_token": "<api token from https://www.wanikani.com/settings/personal_access_tokens>"
+    },
+    "anki": {
+      "target_deck": "<Target Anki-Deck name>"
+    },
+    "jisho": {}
+  },
+  "config": [
+    {
+      "__": "_load notes from <source>, include information from endpoints defined in <enrichment> and store them in <target>",
+      "source": "anki",
+      "target": "anki",
+      "enrichment": [
+        "wanikani",
+        "jisho"
+      ]
+    }
+  ]
+}
