@@ -93,6 +93,7 @@ class Wanikani(BaseProvider, BaseNoteProvider):
         details.source = NoteSource(self.endpoint_name(), subject['id'])
 
         details.fields['Question'] = subject['data']['slug']
+        details.fields['Question Hiragana'] = "/".join([reading['reading'] for reading in subject['data']['readings'] if reading['accepted_answer']])
         details.fields['Answer'] = ", ".join([meaning['meaning'] for meaning in subject['data']['meanings'] if meaning['accepted_answer']])
         details.fields['meaning_mnemonic'] = subject['data']['meaning_mnemonic']
         details.fields['reading_mnemonic'] = subject['data']['reading_mnemonic']
