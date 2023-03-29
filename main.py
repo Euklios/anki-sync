@@ -4,8 +4,8 @@ from anki import anki_request, update_anki_note
 from data.NoteDetails import NoteDetails
 from data.Settings import Settings
 from decorators import retry
-from providers.jisho import Jisho
-from providers.wani import Wanikani
+from endpoints.jisho import Jisho
+from endpoints.wani import Wanikani
 from tqdm import tqdm
 
 from settings_loader import load_settings
@@ -16,7 +16,7 @@ FIELD_MAPPINGS = {
 }
 
 
-# TODO: Revert back to list, this should not instantiate the providers
+# TODO: Revert back to list, this should not instantiate the endpoints
 def get_providers(settings: Settings):
     return [
         Wanikani(settings.wanikani.api_token),

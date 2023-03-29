@@ -1,7 +1,7 @@
 import requests
 
 from data.NoteDetails import NoteDetails
-from data.BaseProvider import BaseProvider
+from endpoints.abc.BaseProvider import BaseProvider
 
 
 class Wanikani(BaseProvider):

@@ -5,7 +5,7 @@ from jisho_api.word.cfg import WordConfig
 from jisho_api.word.request import WordRequest
 from tqdm import tqdm
 
-from data.BaseProvider import BaseProvider
+from endpoints.abc.BaseProvider import BaseProvider
 from data.NoteDetails import NoteDetails
 
 
