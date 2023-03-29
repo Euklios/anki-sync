@@ -1,5 +1,6 @@
 from data.NoteDetails import NoteDetails
 from endpoints.abc.NoteConsumer import BaseNoteConsumer
+from endpoints.abc.NoteProvider import BaseNoteProvider
 
 
 def map_fields(field_mappings, data):
@@ -28,7 +29,11 @@ def _update_note(target: BaseNoteConsumer, note: NoteDetails, query: str):
 
 
 def _save_note(target: BaseNoteConsumer, note: NoteDetails, query: str):
-    raise "Error, new notes are currently not supported"
+    if isinstance(target, BaseNoteProvider):
+        if not any(filter(lambda e: e.fields['Question'] == note.fields['Question'], target.list_notes())):
+            target.store_note(note, query)
+    else:
+        raise "Error, new notes are currently not supported"
 
 
 def save_or_update_note(target: BaseNoteConsumer, note: NoteDetails, query: str):

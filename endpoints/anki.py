@@ -39,8 +39,36 @@ class Anki(BaseNoteConsumer, BaseNoteProvider):
     def __init__(self, settings: AnkiSettings):
         self.settings = settings
 
-    def store_note(self, note: NoteDetails) -> None:
-        pass
+    def store_note(self, note: NoteDetails, query: str) -> None:
+        filename = f'{query}.mp3'
+        fields = map_fields(self.settings.field_mappings, note.fields)
+        tags = ' '.join(note.tags)
+
+        if note.pronunciation:
+            self.anki_request('storeMediaFile', filename=filename, url=note.pronunciation)
+            fields[self.settings.pronunciation_field] = f'[sound:{filename}]'
+        else:
+            fields[self.settings.pronunciation_field] = ''
+
+        new_note = self.anki_request(
+            'addNote',
+            note={
+                "deckName": self.settings.target_deck,
+                "modelName": "Simple Model",
+                "fields": fields,
+                "options": {
+                    "allowDuplicate": False,
+                    "duplicateScope": "deck",
+                    "duplicateScopeOptions": {
+                        "deckName": "Default",
+                        "checkChildren": False,
+                        "checkAllModels": False
+                    }
+                }
+            }
+        )
+
+        self.anki_request('addTags', notes=[new_note['result']], tags=' '.join(note.tags))
 
     def update_note(self, note: NoteDetails, query: str) -> None:
         filename = f'{query}.mp3'

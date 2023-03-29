@@ -6,7 +6,7 @@ from endpoints.abc.BaseEndpoint import BaseEndpoint
 
 class BaseNoteConsumer(BaseEndpoint, abc.ABC):
     @abc.abstractmethod
-    def store_note(self, note: NoteDetails) -> None:
+    def store_note(self, note: NoteDetails, query: str) -> None:
         pass
 
     @abc.abstractmethod
