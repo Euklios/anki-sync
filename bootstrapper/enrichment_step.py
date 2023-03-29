@@ -38,7 +38,7 @@ class Step:
 
         for provider in self.enrichments[::-1]:
             details = NoteDetails()
-            provider.search_content_by_string(query)
+            provider.search_content_by_string(query, note)
 
             note = merge_details(note, details)
 

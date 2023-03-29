@@ -6,5 +6,5 @@ from endpoints.abc.BaseEndpoint import BaseEndpoint
 
 class BaseProvider(BaseEndpoint, abc.ABC):
     @abc.abstractmethod
-    def search_content_by_string(self, query: str) -> NoteDetails:
+    def search_content_by_string(self, query: str, existing_details: NoteDetails) -> NoteDetails:
         pass

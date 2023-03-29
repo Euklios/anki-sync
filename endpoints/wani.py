@@ -72,7 +72,7 @@ class Wanikani(BaseProvider, BaseNoteProvider):
             total_count = response['total_count']
             collected_count += len(response['data'])
 
-    def search_content_by_string(self, query: str) -> NoteDetails:
+    def search_content_by_string(self, query: str, existing_details: NoteDetails) -> NoteDetails:
         details = NoteDetails()
         try:
             vocab = next(filter(lambda a: a['data']['characters'] == query and a['object'] == 'vocabulary', self.subjects))
