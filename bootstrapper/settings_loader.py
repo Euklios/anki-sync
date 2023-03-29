@@ -42,7 +42,7 @@ def parse_config_settings(configurations) -> List[ProcessConfigurationObject]:
         config_obj = ProcessConfigurationObject()
         config_obj.source = configuration['source']
         config_obj.target = configuration['target']
-        config_obj.enrichment = configuration['enrichment']
+        config_obj.enrichment = configuration.get('enrichment', list())
 
         config_objects.append(config_obj)
 
