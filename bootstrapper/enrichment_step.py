@@ -22,8 +22,12 @@ class Step:
         self.enrichments: List[BaseProvider] = enrichments
 
     def process_step(self):
+        self.source.sync_profile()
+
         for note in self.source.list_notes():
             self.update_single_note(note)
+
+        self.target.sync_profile()
 
     @retry(times=5, exceptions=(ConnectionError, IOError), delay=5)
     def update_single_note(self, note):

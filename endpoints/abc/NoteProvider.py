@@ -9,3 +9,6 @@ class BaseNoteProvider(BaseEndpoint, abc.ABC):
     @abc.abstractmethod
     def list_notes(self) -> Iterable[NoteDetails]:
         pass
+
+    def sync_profile(self):
+        pass

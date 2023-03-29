@@ -60,6 +60,9 @@ class Anki(BaseNoteConsumer, BaseNoteProvider):
             'fields': fields
         })
 
+    def sync_profile(self):
+        self.anki_request('sync')
+
     def anki_request(self, action: str, **params):
         request_payload = json.dumps({'action': action, 'params': params, 'version': 6}).encode('UTF-8')
         response = requests.request('get', self.settings.host, data=request_payload)

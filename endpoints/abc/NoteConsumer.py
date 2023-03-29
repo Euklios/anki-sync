@@ -13,3 +13,6 @@ class BaseNoteConsumer(BaseEndpoint, abc.ABC):
     @abc.abstractmethod
     def update_note(self, note, query: str, content_info: NoteDetails) -> None:
         pass
+
+    def sync_profile(self):
+        pass
