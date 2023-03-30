@@ -1,4 +1,3 @@
-import re
 from typing import List
 
 from data.NoteDetails import NoteDetails
@@ -7,13 +6,6 @@ from endpoints.abc.NoteConsumer import BaseNoteConsumer
 from endpoints.abc.NoteProvider import BaseNoteProvider
 from endpoints.abc.BaseProvider import BaseProvider
 from utils.utils import merge_details, save_or_update_note
-
-
-def cleanup_query(question):
-    question = re.compile('<rt>[^<]*</rt>').sub('', question)
-    question = question.replace('<ruby>', '').replace('</ruby>', '')
-
-    return question
 
 
 class Step:
@@ -33,8 +25,7 @@ class Step:
     @retry(times=5, exceptions=(ConnectionError, IOError), delay=5)
     def update_single_note(self, note: NoteDetails):
         # TODO: The question field should be configurable
-        # TODO: cleanup_query should be removed
-        query = cleanup_query(note.fields['Question'])
+        query = note.fields['Question']
 
         for provider in self.enrichments:
             details = provider.update_content_by_query(query, note)
